@@ -38,7 +38,7 @@ Muda wa kazi: ${data.years_job}
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        chat_id: process.env.TELEGRAM_CHAT_ID,
+        chat_id: process.env.CHAT_ID,
         text: telegramMessage,
       }),
     });
