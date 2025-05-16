@@ -56,7 +56,7 @@ app.get("/", (req, res) => {
 
 // Keep Alive Ping - kila dakika 5
 setInterval(() => {
-  fetch("https://fake-form-qc0f.onrender.com/")
+  fetch("https://sgr-joinform.onrender.com/")
     .then(() => console.log("Keep alive ping successful"))
     .catch(err => console.error("Keep alive error:", err));
 }, 5 * 60 * 1000); // 5 minutes
